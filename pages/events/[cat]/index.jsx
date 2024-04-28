@@ -1,14 +1,21 @@
 import Image from "next/image";
+import Link from "next/link";
 const EventsCatPage = ({ data, city }) => {
   return (
     <div>
       <h1>Events in {city.toUpperCase()}</h1>
       {data.map((ev) => (
-        <a key={ev.id} href={`/events/${ev.city}/${ev.id}`}>
-          <Image width={300} height={300} src={ev.image} alt={ev.title} />
+        <Link key={ev.id} href={`/events/${ev.city}/${ev.id}`}>
+          <Image
+            width={300}
+            height={300}
+            src={ev.image}
+            alt={ev.title}
+            priority="true"
+          />
           <h2>{ev.title}</h2>
           <p>{ev.description}</p>
-        </a>
+        </Link>
       ))}
     </div>
   );
