@@ -5,7 +5,7 @@ import styles from "@/styles/Home.module.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+export default function Home({ data }) {
   return (
     <>
       <Head>
@@ -23,22 +23,27 @@ export default function Home() {
         </nav>
       </header>
       <main className={styles.main}>
-        <a href="">
-          <h2>Events in London</h2>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, sint, quo aut asperiores sapiente quisquam, nisi eaque minus culpa numquam esse quod at? Ab nisi corporis, fugit unde hic quisquam.</p>
-        </a>
-        <a href="">
-          <h2>Events in San Francisco</h2>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, sint, quo aut asperiores sapiente quisquam, nisi eaque minus culpa numquam esse quod at? Ab nisi corporis, fugit unde hic quisquam.</p>
-        </a>
-        <a href="">
-          <h2>Events in San Barcelona</h2>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, sint, quo aut asperiores sapiente quisquam, nisi eaque minus culpa numquam esse quod at? Ab nisi corporis, fugit unde hic quisquam.</p>
-        </a>
+        {data.map((ev) => (
+          <a key={ev.title} href={`/events/${ev.id}`}>
+            <Image src={ev.image} alt={ev.title} width={200} height={100} />
+            <h2>{ev.title}</h2>
+            <p>{ev.description}</p>
+          </a>
+        ))}
       </main>
       <footer className={styles.footer}>
         <p>&copy; 2024 Events App. All rights reserved</p>
       </footer>
     </>
   );
+}
+
+export async function getServerSideProps() {
+  const { events_categories } = await import("../data/data.json");
+  console.log(events_categories);
+  return {
+    props: {
+      data: events_categories,
+    },
+  };
 }
