@@ -1,30 +1,20 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 const SingleEvent = ({ data }) => {
   const inputEmail = useRef();
   const router = useRouter();
   const [message, setMessage] = useState("");
-  useEffect(() => {
-    if (message !== "" && message !== null) {
-      console.log("Message changed, displaying alert:", message);
-      alert(message);
-    }
-  }, [message]);
-    // const setMessage = (newMessage) => {
-    //   console.log("Setting message:", newMessage);
-    //   setMessage(newMessage);
-    // };
+const [messageClass,setMessageClass] = useState('')
   const onSubmit = async (e) => {
     e.preventDefault();
     const emailValue = inputEmail.current.value;
     const eventId = router?.query.id;
     const validRegex =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    console.log("Submitting form...");
     if (!emailValue.match(validRegex)) {
-      console.log("Invalid email format, setting message...");
       setMessage("Please introduce a correct email address");
+      setMessageClass("message-error")
       return;
     }
     try {
@@ -39,8 +29,8 @@ const SingleEvent = ({ data }) => {
         throw new Error(`Error: ${response.status}`);
       }
       const responseData = await response.json();
-      console.log("Setting message from response data...");
       setMessage(responseData.message);
+      setMessageClass("message-success");
       inputEmail.current.value = "";
     } catch (e) {
       console.log("ERROR", e);
@@ -67,7 +57,7 @@ const SingleEvent = ({ data }) => {
         />
         <button type="submit">Submit</button>
       </form>
-      {/* <alert>{message}</alert> */}
+      <p className={messageClass}>{message}</p>
     </div>
   );
 };
