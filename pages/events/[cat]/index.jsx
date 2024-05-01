@@ -1,24 +1,7 @@
-import Image from "next/image";
-import Link from "next/link";
+import CatEvents from "@/src/components/events/CatEvents";
+
 const EventsCatPage = ({ data, city }) => {
-  return (
-    <div>
-      <h1>Events in {city.toUpperCase()}</h1>
-      {data.map((ev) => (
-        <Link key={ev.id} href={`/events/${ev.city}/${ev.id}`}>
-          <Image
-            width={300}
-            height={300}
-            src={ev.image}
-            alt={ev.title}
-            priority="true"
-          />
-          <h2>{ev.title}</h2>
-          <p>{ev.description}</p>
-        </Link>
-      ))}
-    </div>
-  );
+  return <CatEvents data={data} city={city} />;
 };
 export default EventsCatPage;
 
@@ -31,7 +14,6 @@ export async function getStaticPaths() {
       },
     };
   });
-  console.log(allPaths);
   return {
     paths: allPaths,
     fallback: false,
@@ -39,11 +21,8 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps(context) {
-  console.log(context);
   const id = context?.params.cat;
-  console.log(id);
   const { allEvents } = await import("../../../data/data.json");
   const data = allEvents.filter((ev) => ev.city === id);
-  console.log(data);
   return { props: { data: data, city: id } };
 }

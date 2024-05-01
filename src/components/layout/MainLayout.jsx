@@ -1,13 +1,13 @@
 import { Footer } from "../footer/Footer";
 import { Header } from "../header/Header";
 
-const MainLayout = ({children}) => {
+const MainLayout = ({ children }) => {
   return (
     <>
-    <Header/>
-    {children}
-    <Footer/>
+      <Header />
+      <main>{children}</main>
+      <Footer />
     </>
-  )
+  );
 };
 export default MainLayout;
